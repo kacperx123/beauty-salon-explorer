@@ -13,6 +13,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OsmSalonImportService {
 
+    private final SalonDeduplicationService salonDeduplicationService;
     private final OsmOverpassClient osmOverpassClient;
     private final OsmSalonMapper osmSalonMapper;
 
@@ -23,12 +24,14 @@ public class OsmSalonImportService {
             return List.of();
         }
 
-        return response.elements()
+        List<Salon> salons = response.elements()
                 .stream()
                 .map(osmSalonMapper::mapToSalon)
                 .flatMap(Optional::stream)
                 .filter(Objects::nonNull)
                 .sorted(Comparator.comparing(Salon::getName))
                 .toList();
+
+        return salonDeduplicationService.deduplicate(salons);
     }
 }
