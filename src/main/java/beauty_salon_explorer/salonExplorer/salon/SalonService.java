@@ -33,7 +33,7 @@ public class SalonService {
     @Transactional(readOnly = true)
     public SalonDetailsResponse getSalon(Long id) {
         Salon salon = salonRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Salon not found with id: " + id));
+                .orElseThrow(() -> new SalonNotFoundException(id));
 
         return SalonMapper.toDetailsResponse(salon);
     }
@@ -41,7 +41,7 @@ public class SalonService {
     @Transactional
     public SalonDetailsResponse updateSalon(Long id, UpdateSalonRequest request) {
         Salon salon = salonRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Salon not found with id: " + id));
+                .orElseThrow(() -> new SalonNotFoundException(id));
 
         if (request.name() != null) {
             salon.setName(request.name());
