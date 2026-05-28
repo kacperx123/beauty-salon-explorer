@@ -1,9 +1,15 @@
 services:
   postgres:
-    image: 'postgres:latest'
+    image: postgres:16
+    container_name: salon-explorer-postgres
     environment:
-      - 'POSTGRES_DB=mydatabase'
-      - 'POSTGRES_PASSWORD=secret'
-      - 'POSTGRES_USER=myuser'
+      POSTGRES_DB: salon_explorer
+      POSTGRES_USER: salon_user
+      POSTGRES_PASSWORD: salon_password
     ports:
-      - '5432'
+      - "5432:5432"
+    volumes:
+      - salon_explorer_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  salon_explorer_postgres_data:
