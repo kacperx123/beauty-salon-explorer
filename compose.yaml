@@ -7,7 +7,7 @@ services:
       POSTGRES_USER: salon_user
       POSTGRES_PASSWORD: salon_password
     ports:
-      - "5432:5432"
+      - "5434:5432"
     volumes:
       - salon_explorer_postgres_data:/var/lib/postgresql/data
 
