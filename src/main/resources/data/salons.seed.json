@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Beauty Studio Warsaw",
+    "address": "Marszałkowska 10, Warszawa",
+    "district": "Śródmieście",
+    "phoneNumber": "+48111222333",
+    "websiteUrl": "https://beautystudio.pl",
+    "services": ["beauty", "hairdresser"],
+    "priceRange": "$$",
+    "rating": 4.7,
+    "reviewCount": 120,
+    "source": "manual-seed",
+    "externalId": "seed-1",
+    "latitude": 52.2297,
+    "longitude": 21.0122
+  },
+  {
+    "name": "Mokotów Hair Salon",
+    "address": "Puławska 50, Warszawa",
+    "district": "Mokotów",
+    "phoneNumber": null,
+    "websiteUrl": null,
+    "services": ["hairdresser"],
+    "priceRange": "$",
+    "rating": 4.3,
+    "reviewCount": 52,
+    "source": "manual-seed",
+    "externalId": "seed-2",
+    "latitude": 52.1900,
+    "longitude": 21.0300
+  },
+  {
+    "name": "Ursynów Beauty Point",
+    "address": "KEN 20, Warszawa",
+    "district": "Ursynów",
+    "phoneNumber": null,
+    "websiteUrl": "https://ursynowbeauty.pl",
+    "services": ["beauty", "spa"],
+    "priceRange": "$$$",
+    "rating": 4.9,
+    "reviewCount": 210,
+    "source": "manual-seed",
+    "externalId": "seed-3",
+    "latitude": 52.1500,
+    "longitude": 21.0500
+  }
+]
