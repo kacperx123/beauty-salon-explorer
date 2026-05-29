@@ -4,6 +4,7 @@ import beauty_salon_explorer.salonExplorer.salon.Salon;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -13,25 +14,31 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OsmSalonImportService {
 
-    private final SalonDeduplicationService salonDeduplicationService;
     private final OsmOverpassClient osmOverpassClient;
     private final OsmSalonMapper osmSalonMapper;
+    private final SalonDeduplicationService salonDeduplicationService;
 
     public List<Salon> importWarsawBeautySalons() {
-        OsmResponse response = osmOverpassClient.fetchWarsawBeautySalons();
+        List<Salon> salons = Arrays.stream(WarsawDistrict.values())
+                .flatMap(district -> importDistrictSalons(district).stream())
+                .sorted(Comparator.comparing(Salon::getName))
+                .toList();
+
+        return salonDeduplicationService.deduplicate(salons);
+    }
+
+    private List<Salon> importDistrictSalons(WarsawDistrict district) {
+        OsmResponse response = osmOverpassClient.fetchBeautySalonsByDistrict(district);
 
         if (response == null || response.elements() == null) {
             return List.of();
         }
 
-        List<Salon> salons = response.elements()
+        return response.elements()
                 .stream()
-                .map(osmSalonMapper::mapToSalon)
+                .map(element -> osmSalonMapper.mapToSalon(element, district.displayName()))
                 .flatMap(Optional::stream)
                 .filter(Objects::nonNull)
-                .sorted(Comparator.comparing(Salon::getName))
                 .toList();
-
-        return salonDeduplicationService.deduplicate(salons);
     }
 }

@@ -13,7 +13,7 @@ public class OsmSalonMapper {
 
     private static final String DEFAULT_DISTRICT = "Warsaw";
 
-    public Optional<Salon> mapToSalon(OsmElement element) {
+    public Optional<Salon> mapToSalon(OsmElement element, String district) {
         Map<String, String> tags = element.tags();
 
         if (tags == null || isBlank(tags.get("name"))) {
