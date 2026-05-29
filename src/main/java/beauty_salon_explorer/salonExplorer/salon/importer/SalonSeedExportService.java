@@ -2,6 +2,7 @@ package beauty_salon_explorer.salonExplorer.salon.importer;
 
 import beauty_salon_explorer.salonExplorer.salon.Salon;
 import beauty_salon_explorer.salonExplorer.salon.SalonRepository;
+import beauty_salon_explorer.salonExplorer.salon.SalonSeedItem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.ObjectMapper;
@@ -20,9 +21,10 @@ public class SalonSeedExportService {
     private final ObjectMapper objectMapper;
 
     public String exportSeedJson() throws Exception {
-        List<Salon> salons = salonRepository.findAll()
+        List<SalonSeedItem> seedItems = salonRepository.findAll()
                 .stream()
                 .sorted(Comparator.comparing(Salon::getName))
+                .map(this::mapToSeedItem)
                 .toList();
 
         Path outputPath = Path.of(
@@ -35,12 +37,29 @@ public class SalonSeedExportService {
 
         Files.createDirectories(outputPath.getParent());
 
-        ObjectMapper localMapper = objectMapper.rebuild()
-                .enable(SerializationFeature.INDENT_OUTPUT)
-                .build();
+        ObjectMapper localMapper = objectMapper.rebuild().
+                enable(SerializationFeature.INDENT_OUTPUT).
+                build();
+        objectMapper.writeValue(outputPath.toFile(), seedItems);
 
-        objectMapper.writeValue(outputPath.toFile(), salons);
+        return "Exported salons to seed JSON: " + seedItems.size();
+    }
 
-        return "Exported salons to seed JSON: " + salons.size();
+    private SalonSeedItem mapToSeedItem(Salon salon) {
+        return new SalonSeedItem(
+                salon.getName(),
+                salon.getAddress(),
+                salon.getDistrict(),
+                salon.getPhoneNumber(),
+                salon.getWebsiteUrl(),
+                salon.getServices(),
+                salon.getPriceRange(),
+                salon.getRating(),
+                salon.getReviewCount(),
+                salon.getSource(),
+                salon.getExternalId(),
+                salon.getLatitude(),
+                salon.getLongitude()
+        );
     }
 }

@@ -1,5 +1,6 @@
 package beauty_salon_explorer.salonExplorer.salon;
 
+import beauty_salon_explorer.salonExplorer.salon.dto.PageResponse;
 import beauty_salon_explorer.salonExplorer.salon.dto.SalonDetailsResponse;
 import beauty_salon_explorer.salonExplorer.salon.dto.SalonListItemResponse;
 import beauty_salon_explorer.salonExplorer.salon.dto.UpdateSalonRequest;
@@ -16,11 +17,22 @@ public class SalonController {
     private final SalonService salonService;
 
     @GetMapping
-    public List<SalonListItemResponse> getSalons(
+    public PageResponse<SalonListItemResponse> getSalons(
             @RequestParam(required = false) String district,
-            @RequestParam(required = false) String service
+            @RequestParam(required = false) String service,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction
     ) {
-        return salonService.getSalons(district, service);
+        return salonService.getSalons(
+                district,
+                service,
+                page,
+                size,
+                sortBy,
+                direction
+        );
     }
 
     @GetMapping("/{id}")

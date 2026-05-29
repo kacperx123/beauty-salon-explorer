@@ -1,9 +1,14 @@
 package beauty_salon_explorer.salonExplorer.salon;
 
+import beauty_salon_explorer.salonExplorer.salon.dto.PageResponse;
 import beauty_salon_explorer.salonExplorer.salon.dto.SalonDetailsResponse;
 import beauty_salon_explorer.salonExplorer.salon.dto.SalonListItemResponse;
 import beauty_salon_explorer.salonExplorer.salon.dto.UpdateSalonRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,16 +23,50 @@ public class SalonService {
     private final SalonRepository salonRepository;
 
     @Transactional(readOnly = true)
-    public List<SalonListItemResponse> getSalons(String district, String service) {
-        return salonRepository.findAll()
+    public PageResponse<SalonListItemResponse> getSalons(
+            String district,
+            String service,
+            int page,
+            int size,
+            String sortBy,
+            String direction
+    ) {
+        Sort sort = buildSort(sortBy, direction);
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<Salon> salonsPage = salonRepository.findAll(
+                SalonSpecification.hasDistrict(district)
+                        .and(SalonSpecification.hasService(service)),
+                pageable
+        );
+
+        List<SalonListItemResponse> content = salonsPage.getContent()
                 .stream()
-                .filter(salon -> district == null || district.isBlank()
-                        || salon.getDistrict().equalsIgnoreCase(district))
-                .filter(salon -> service == null || service.isBlank()
-                        || salon.getServices().stream().anyMatch(item -> item.equalsIgnoreCase(service)))
-                .sorted(Comparator.comparing(Salon::getName))
                 .map(SalonMapper::toListItemResponse)
                 .toList();
+
+        return new PageResponse<>(
+                content,
+                salonsPage.getNumber(),
+                salonsPage.getSize(),
+                salonsPage.getTotalElements(),
+                salonsPage.getTotalPages()
+        );
+    }
+
+    private Sort buildSort(String sortBy, String direction) {
+        String safeSortBy = switch (sortBy == null ? "" : sortBy) {
+            case "district" -> "district";
+            case "rating" -> "rating";
+            case "priceRange" -> "priceRange";
+            default -> "name";
+        };
+
+        Sort.Direction safeDirection = "desc".equalsIgnoreCase(direction)
+                ? Sort.Direction.DESC
+                : Sort.Direction.ASC;
+
+        return Sort.by(safeDirection, safeSortBy);
     }
 
     @Transactional(readOnly = true)
