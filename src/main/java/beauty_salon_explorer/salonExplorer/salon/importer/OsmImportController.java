@@ -11,6 +11,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OsmImportController {
 
+    private final SalonSeedExportService salonSeedExportService;
     private final OsmOverpassClient osmOverpassClient;
     private final OsmSalonImportService osmSalonImportService;
 
@@ -22,6 +23,11 @@ public class OsmImportController {
     @GetMapping("/mapped-salons")
     public List<Salon> fetchMappedSalonsFromOsm() {
         return osmSalonImportService.importWarsawBeautySalons();
+    }
+
+    @GetMapping("/export-seed")
+    public String exportSeedJson() throws Exception {
+        return salonSeedExportService.exportSeedJson();
     }
 
     @PostMapping("/import")
