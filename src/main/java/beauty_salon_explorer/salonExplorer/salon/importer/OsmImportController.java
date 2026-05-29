@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/admin/osm")
@@ -26,13 +27,43 @@ public class OsmImportController {
         return osmSalonImportService.importWarsawBeautySalons();
     }
 
+    private void updateExistingSalon(Salon existingSalon, Salon importedSalon) {
+        existingSalon.setName(importedSalon.getName());
+        existingSalon.setAddress(importedSalon.getAddress());
+        existingSalon.setDistrict(importedSalon.getDistrict());
+        existingSalon.setPhoneNumber(importedSalon.getPhoneNumber());
+        existingSalon.setWebsiteUrl(importedSalon.getWebsiteUrl());
+        existingSalon.setServices(importedSalon.getServices());
+        existingSalon.setPriceRange(importedSalon.getPriceRange());
+        existingSalon.setRating(importedSalon.getRating());
+        existingSalon.setReviewCount(importedSalon.getReviewCount());
+        existingSalon.setSource(importedSalon.getSource());
+        existingSalon.setLatitude(importedSalon.getLatitude());
+        existingSalon.setLongitude(importedSalon.getLongitude());
+
+        salonRepository.save(existingSalon);
+    }
+
     @PostMapping("/import")
     public String importSalonsToDatabase() {
+        List<Salon> importedSalons = osmSalonImportService.importWarsawBeautySalons();
 
-        List<Salon> salons = osmSalonImportService.importWarsawBeautySalons();
+        int created = 0;
+        int updated = 0;
 
-        salonRepository.saveAll(salons);
+        for (Salon importedSalon : importedSalons) {
+            Optional<Salon> existingSalon = salonRepository.findByExternalId(importedSalon.getExternalId());
 
-        return "Imported salons: " + salons.size();
+            if (existingSalon.isPresent()) {
+                updateExistingSalon(existingSalon.get(), importedSalon);
+                updated++;
+                continue;
+            }
+
+            salonRepository.save(importedSalon);
+            created++;
+        }
+
+        return "Created salons: " + created + ", updated salons: " + updated;
     }
 }

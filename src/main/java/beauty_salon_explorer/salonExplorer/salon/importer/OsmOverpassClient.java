@@ -29,6 +29,21 @@ public class OsmOverpassClient {
         return executeQuery(query);
     }
 
+    public OsmResponse fetchBeautySalonsByDistrict(WarsawDistrict district) {
+        String query = """
+            [out:json][timeout:60];
+            area["name"="%s"]["boundary"="administrative"]->.district;
+            (
+              nwr["shop"="hairdresser"](area.district);
+              nwr["shop"="beauty"](area.district);
+              nwr["beauty"](area.district);
+            );
+            out center tags;
+            """.formatted(district.displayName());
+
+        return executeQuery(query);
+    }
+
     private OsmResponse executeQuery(String query) {
         try {
             return restClient.post()
@@ -55,4 +70,6 @@ public class OsmOverpassClient {
             );
         }
     }
+
+
 }

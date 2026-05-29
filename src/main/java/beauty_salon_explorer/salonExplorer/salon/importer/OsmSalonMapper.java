@@ -30,7 +30,7 @@ public class OsmSalonMapper {
 
         salon.setName(tags.get("name"));
         salon.setAddress(address);
-        salon.setDistrict(resolveDistrict(tags));
+        salon.setDistrict(district);
         salon.setPhoneNumber(firstNonBlank(tags.get("phone"), tags.get("contact:phone")));
         salon.setWebsiteUrl(firstNonBlank(tags.get("website"), tags.get("contact:website")));
         salon.setServices(resolveServices(tags));
