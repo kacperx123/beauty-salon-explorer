@@ -1,0 +1,54 @@
+<section class="salon-list-page">
+  <header class="salon-list-page__header">
+    <h1>Explore beauty salons in Warsaw</h1>
+    <p>
+      Browse local hair and beauty salons, filter them by district or service,
+      and open details to update salon information.
+    </p>
+  </header>
+
+  <p class="salon-list-page__summary" *ngIf="!isLoading && !errorMessage">
+    Showing {{ salons.length }} of {{ totalElements }} salons
+  </p>
+
+  <div class="salon-list-page__loading" *ngIf="isLoading">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <mat-card class="salon-list-page__error" *ngIf="errorMessage">
+    <mat-card-content>
+      {{ errorMessage }}
+    </mat-card-content>
+  </mat-card>
+
+  <div class="salon-list-page__grid" *ngIf="!isLoading && !errorMessage">
+    <mat-card class="salon-card" *ngFor="let salon of salons">
+      <mat-card-header>
+        <mat-card-title>{{ salon.name }}</mat-card-title>
+        <mat-card-subtitle>{{ salon.district }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p>
+          <strong>Services:</strong>
+          {{ salon.services.length ? salon.services.join(', ') : 'Unknown' }}
+        </p>
+
+        <p>
+          <strong>Rating:</strong>
+          {{ salon.rating ?? 'No rating' }}
+        </p>
+
+        <p>
+          <strong>Reviews:</strong>
+          {{ salon.reviewCount ?? 'No reviews' }}
+        </p>
+
+        <p>
+          <strong>Price:</strong>
+          {{ salon.priceRange ?? 'Unknown' }}
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</section>
