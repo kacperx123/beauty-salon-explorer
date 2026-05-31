@@ -83,6 +83,22 @@ public class OsmSalonMapper {
         );
     }
 
+    private void addSplitServices(Set<String> services, String value) {
+        if (isBlank(value)) {
+            return;
+        }
+
+        String[] parts = value.split("[;,]");
+
+        for (String part : parts) {
+            String normalizedService = part.trim().toLowerCase();
+
+            if (!normalizedService.isBlank()) {
+                services.add(normalizedService);
+            }
+        }
+    }
+
     private Set<String> resolveServices(Map<String, String> tags) {
         Set<String> services = new HashSet<>();
 
@@ -97,9 +113,7 @@ public class OsmSalonMapper {
             services.add("beauty");
         }
 
-        if (!isBlank(beauty)) {
-            services.add(beauty.toLowerCase());
-        }
+        addSplitServices(services, beauty);
 
         if (services.isEmpty()) {
             services.add("beauty");

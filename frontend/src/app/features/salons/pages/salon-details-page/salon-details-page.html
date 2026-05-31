@@ -1,0 +1,123 @@
+<section class="salon-details-page">
+  <a mat-button routerLink="/salons">
+    ← Back to salons
+  </a>
+
+  <div class="salon-details-page__loading" *ngIf="isLoading">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <mat-card class="salon-details-page__error" *ngIf="errorMessage">
+    <mat-card-content>
+      {{ errorMessage }}
+    </mat-card-content>
+  </mat-card>
+
+  <article class="salon-details-page__content" *ngIf="!isLoading && !errorMessage && salon">
+    <header class="salon-details-page__header">
+      <div>
+        <h1>{{ salon.name }}</h1>
+        <p>{{ salon.district }}</p>
+      </div>
+
+      <button mat-flat-button color="primary">
+        Edit details
+      </button>
+    </header>
+
+    <mat-card>
+      <mat-card-content>
+        <div class="salon-details-page__section">
+          <h2>Contact and location</h2>
+
+          <dl class="salon-details-page__details">
+            <div>
+              <dt>Address</dt>
+              <dd>{{ salon.address }}</dd>
+            </div>
+
+            <div>
+              <dt>Phone</dt>
+              <dd>{{ salon.phoneNumber || 'Not provided' }}</dd>
+            </div>
+
+            <div>
+              <dt>Website</dt>
+              <dd>
+                <a *ngIf="salon.websiteUrl; else noWebsite" [href]="salon.websiteUrl" target="_blank" rel="noopener">
+                  {{ salon.websiteUrl }}
+                </a>
+
+                <ng-template #noWebsite>
+                  Not provided
+                </ng-template>
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="salon-details-page__section">
+          <h2>Services</h2>
+
+          <mat-chip-set *ngIf="salon.services.length; else noServices">
+            <mat-chip *ngFor="let service of salon.services">
+              {{ service }}
+            </mat-chip>
+          </mat-chip-set>
+
+          <ng-template #noServices>
+            <p>Services not provided.</p>
+          </ng-template>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="salon-details-page__section">
+          <h2>Marketplace info</h2>
+
+          <dl class="salon-details-page__details">
+            <div>
+              <dt>Rating</dt>
+              <dd>{{ salon.rating ?? 'No rating' }}</dd>
+            </div>
+
+            <div>
+              <dt>Reviews</dt>
+              <dd>{{ salon.reviewCount ?? 'No reviews' }}</dd>
+            </div>
+
+            <div>
+              <dt>Price range</dt>
+              <dd>{{ salon.priceRange || 'Unknown' }}</dd>
+            </div>
+          </dl>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="salon-details-page__section">
+          <h2>Source data</h2>
+
+          <dl class="salon-details-page__details">
+            <div>
+              <dt>Source</dt>
+              <dd>{{ salon.source || 'Unknown' }}</dd>
+            </div>
+
+            <div>
+              <dt>Latitude</dt>
+              <dd>{{ salon.latitude ?? 'Unknown' }}</dd>
+            </div>
+
+            <div>
+              <dt>Longitude</dt>
+              <dd>{{ salon.longitude ?? 'Unknown' }}</dd>
+            </div>
+          </dl>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </article>
+</section>

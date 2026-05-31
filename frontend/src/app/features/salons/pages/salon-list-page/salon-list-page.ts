@@ -34,10 +34,8 @@ export class SalonListPage implements OnInit {
   private readonly salonsApiService = inject(SalonsApiService);
 
   salons: SalonListItem[] = [];
-  districts: string[] = [];
   services: string[] = [];
 
-  selectedDistrict: string | null = null;
   selectedService: string | null = null;
 
   page = 0;
@@ -56,26 +54,27 @@ export class SalonListPage implements OnInit {
     this.isLoading = true;
     this.errorMessage = null;
 
-    this.salonsApiService.getSalons({
-      district: this.selectedDistrict,
-      service: this.selectedService,
-      page: this.page,
-      size: this.size,
-      sortBy: 'name',
-      direction: 'asc',
-    }).subscribe({
-      next: response => {
-        this.salons = response.content;
-        this.totalElements = response.totalElements;
-        this.page = response.page;
-        this.size = response.size;
-        this.isLoading = false;
-      },
-      error: () => {
-        this.errorMessage = 'Could not load salons. Please check if backend API is running.';
-        this.isLoading = false;
-      },
-    });
+    this.salonsApiService
+      .getSalons({
+        service: this.selectedService,
+        page: this.page,
+        size: this.size,
+        sortBy: 'name',
+        direction: 'asc',
+      })
+      .subscribe({
+        next: response => {
+          this.salons = response.content;
+          this.totalElements = response.totalElements;
+          this.page = response.page;
+          this.size = response.size;
+          this.isLoading = false;
+        },
+        error: () => {
+          this.errorMessage = 'Could not load salons. Please check if backend API is running.';
+          this.isLoading = false;
+        },
+      });
   }
 
   onFiltersChange(): void {
@@ -84,7 +83,6 @@ export class SalonListPage implements OnInit {
   }
 
   clearFilters(): void {
-    this.selectedDistrict = null;
     this.selectedService = null;
     this.page = 0;
     this.loadSalons();
@@ -97,12 +95,6 @@ export class SalonListPage implements OnInit {
   }
 
   private loadFilters(): void {
-    this.salonsApiService.getDistricts().subscribe({
-      next: districts => {
-        this.districts = districts;
-      },
-    });
-
     this.salonsApiService.getServices().subscribe({
       next: services => {
         this.services = services;

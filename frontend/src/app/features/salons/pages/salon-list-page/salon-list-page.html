@@ -10,15 +10,6 @@
   <mat-card class="salon-list-page__filters">
     <mat-card-content>
       <div class="salon-list-page__filters-grid">
-        <mat-form-field appearance="outline">
-          <mat-label>District</mat-label>
-          <mat-select [(ngModel)]="selectedDistrict" (selectionChange)="onFiltersChange()">
-            <mat-option [value]="null">All districts</mat-option>
-            <mat-option *ngFor="let district of districts" [value]="district">
-              {{ district }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Service</mat-label>
