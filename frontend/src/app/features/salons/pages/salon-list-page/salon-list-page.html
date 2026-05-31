@@ -52,7 +52,15 @@
       <mat-card-content>
         <p class="salon-card__line">
           <strong>Services:</strong>
-          <span>{{ salon.services.length ? salon.services.join(', ') : 'Unknown' }}</span>
+          <span *ngIf="salon.services.length; else noServices">
+            <span class="salon-card__tag" *ngFor="let service of salon.services">
+              {{ formatService(service) }}
+            </span>
+          </span>
+
+          <ng-template #noServices>
+            Unknown
+          </ng-template>
         </p>
 
         <p class="salon-card__line">

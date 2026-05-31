@@ -94,6 +94,13 @@ export class SalonListPage implements OnInit {
     this.loadSalons();
   }
 
+  formatService(service: string): string {
+    return service
+      .replaceAll('_', ' ')
+      .replaceAll('-', ' ')
+      .trim();
+  }
+
   private loadFilters(): void {
     this.salonsApiService.getServices().subscribe({
       next: services => {

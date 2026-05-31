@@ -13,12 +13,6 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-card class="salon-details-page__success" *ngIf="successMessage">
-    <mat-card-content>
-      {{ successMessage }}
-    </mat-card-content>
-  </mat-card>
-
   <article class="salon-details-page__content" *ngIf="!isLoading && salon">
     <header class="salon-details-page__header">
       <div>
@@ -69,7 +63,7 @@
 
           <mat-chip-set *ngIf="salon.services.length; else noServices">
             <mat-chip *ngFor="let service of salon.services">
-              {{ service }}
+              {{ formatService(service) }}
             </mat-chip>
           </mat-chip-set>
 

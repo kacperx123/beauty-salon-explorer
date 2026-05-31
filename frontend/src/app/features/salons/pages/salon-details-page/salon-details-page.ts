@@ -13,6 +13,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { SalonsApiService } from '../../../../core/api/salons-api.service';
 import { SalonDetails, UpdateSalonRequest } from '../../models/salon.model';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-salon-details-page',
@@ -28,6 +29,7 @@ import { SalonDetails, UpdateSalonRequest } from '../../models/salon.model';
     MatFormFieldModule,
     MatInputModule,
     MatProgressSpinnerModule,
+    MatSnackBarModule,
   ],
   templateUrl: './salon-details-page.html',
   styleUrl: './salon-details-page.scss',
@@ -35,6 +37,7 @@ import { SalonDetails, UpdateSalonRequest } from '../../models/salon.model';
 export class SalonDetailsPage implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly salonsApiService = inject(SalonsApiService);
+  private readonly snackBar = inject(MatSnackBar);
 
   salon: SalonDetails | null = null;
   editForm: UpdateSalonRequest = {};
@@ -99,13 +102,22 @@ export class SalonDetailsPage implements OnInit {
         this.salon = updatedSalon;
         this.isEditing = false;
         this.isSaving = false;
-        this.successMessage = 'Salon details saved successfully.';
+        this.snackBar.open('Salon details saved successfully.', 'Close', {
+          duration: 3000,
+        });
       },
       error: () => {
         this.errorMessage = 'Could not save salon details.';
         this.isSaving = false;
       },
     });
+  }
+
+  formatService(service: string): string {
+    return service
+      .replaceAll('_', ' ')
+      .replaceAll('-', ' ')
+      .trim();
   }
 
   private loadSalon(id: number): void {

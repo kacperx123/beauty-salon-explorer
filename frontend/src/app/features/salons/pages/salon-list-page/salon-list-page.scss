@@ -87,4 +87,17 @@
       word-break: break-word;
     }
   }
+
+  &__tag {
+    display: inline-flex;
+    max-width: 100%;
+    margin: 0 6px 6px 0;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: rgba(63, 81, 181, 0.08);
+    color: #303f9f;
+    font-size: 12px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
 }
