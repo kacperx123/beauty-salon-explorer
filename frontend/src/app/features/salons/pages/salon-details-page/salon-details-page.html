@@ -13,19 +13,25 @@
     </mat-card-content>
   </mat-card>
 
-  <article class="salon-details-page__content" *ngIf="!isLoading && !errorMessage && salon">
+  <mat-card class="salon-details-page__success" *ngIf="successMessage">
+    <mat-card-content>
+      {{ successMessage }}
+    </mat-card-content>
+  </mat-card>
+
+  <article class="salon-details-page__content" *ngIf="!isLoading && salon">
     <header class="salon-details-page__header">
       <div>
         <h1>{{ salon.name }}</h1>
         <p>{{ salon.district }}</p>
       </div>
 
-      <button mat-flat-button color="primary">
+      <button mat-flat-button color="primary" *ngIf="!isEditing" (click)="startEdit()">
         Edit details
       </button>
     </header>
 
-    <mat-card>
+    <mat-card *ngIf="!isEditing">
       <mat-card-content>
         <div class="salon-details-page__section">
           <h2>Contact and location</h2>
@@ -117,6 +123,62 @@
             </div>
           </dl>
         </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card *ngIf="isEditing">
+      <mat-card-content>
+        <form class="salon-details-page__form" (ngSubmit)="saveChanges()">
+          <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput name="name" [(ngModel)]="editForm.name" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Address</mat-label>
+            <input matInput name="address" [(ngModel)]="editForm.address" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>District</mat-label>
+            <input matInput name="district" [(ngModel)]="editForm.district" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Phone</mat-label>
+            <input matInput name="phoneNumber" [(ngModel)]="editForm.phoneNumber" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Website</mat-label>
+            <input matInput name="websiteUrl" [(ngModel)]="editForm.websiteUrl" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Price range</mat-label>
+            <input matInput name="priceRange" [(ngModel)]="editForm.priceRange" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Rating</mat-label>
+            <input matInput type="number" name="rating" [(ngModel)]="editForm.rating" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Review count</mat-label>
+            <input matInput type="number" name="reviewCount" [(ngModel)]="editForm.reviewCount" />
+          </mat-form-field>
+
+          <div class="salon-details-page__form-actions">
+            <button mat-flat-button color="primary" type="submit" [disabled]="isSaving">
+              {{ isSaving ? 'Saving...' : 'Save changes' }}
+            </button>
+
+            <button mat-button type="button" (click)="cancelEdit()" [disabled]="isSaving">
+              Cancel
+            </button>
+          </div>
+        </form>
       </mat-card-content>
     </mat-card>
   </article>

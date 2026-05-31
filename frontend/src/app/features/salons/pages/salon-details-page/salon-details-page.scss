@@ -87,3 +87,21 @@
     }
   }
 }
+
+.salon-details-page {
+  &__success {
+    margin-top: 16px;
+    border-left: 4px solid #2e7d32;
+  }
+
+  &__form {
+    display: grid;
+    gap: 16px;
+  }
+
+  &__form-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+  }
+}
