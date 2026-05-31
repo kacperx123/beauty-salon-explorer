@@ -11,7 +11,7 @@
     <mat-card-content>
       <div class="salon-list-page__filters-grid">
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
           <mat-label>Service</mat-label>
           <mat-select [(ngModel)]="selectedService" (selectionChange)="onFiltersChange()">
             <mat-option [value]="null">All services</mat-option>

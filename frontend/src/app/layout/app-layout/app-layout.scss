@@ -5,6 +5,13 @@
     z-index: 10;
   }
 
+  &__toolbar-content {
+    width: min(1180px, calc(100% - 32px));
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+  }
+
   &__brand {
     color: inherit;
     font-size: 18px;
@@ -13,7 +20,7 @@
   }
 
   &__spacer {
-    flex: 1 1 auto;
+    flex: 1;
   }
 
   &__main {
