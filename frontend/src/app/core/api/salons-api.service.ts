@@ -15,7 +15,7 @@ import { Observable } from 'rxjs';
 export class SalonsApiService {
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = 'http://localhost:8080/api/salons';
+  private readonly apiUrl = '/api/salons';
 
   getSalons(params: SalonSearchParams = {}): Observable<PageResponse<SalonListItem>> {
     let httpParams = new HttpParams()
