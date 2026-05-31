@@ -7,6 +7,36 @@
     </p>
   </header>
 
+  <mat-card class="salon-list-page__filters">
+    <mat-card-content>
+      <div class="salon-list-page__filters-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>District</mat-label>
+          <mat-select [(ngModel)]="selectedDistrict" (selectionChange)="onFiltersChange()">
+            <mat-option [value]="null">All districts</mat-option>
+            <mat-option *ngFor="let district of districts" [value]="district">
+              {{ district }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Service</mat-label>
+          <mat-select [(ngModel)]="selectedService" (selectionChange)="onFiltersChange()">
+            <mat-option [value]="null">All services</mat-option>
+            <mat-option *ngFor="let service of services" [value]="service">
+              {{ service }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-stroked-button type="button" (click)="clearFilters()">
+          Clear filters
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
   <p class="salon-list-page__summary" *ngIf="!isLoading && !errorMessage">
     Showing {{ salons.length }} of {{ totalElements }} salons
   </p>
@@ -29,26 +59,41 @@
       </mat-card-header>
 
       <mat-card-content>
-        <p>
+        <p class="salon-card__line">
           <strong>Services:</strong>
-          {{ salon.services.length ? salon.services.join(', ') : 'Unknown' }}
+          <span>{{ salon.services.length ? salon.services.join(', ') : 'Unknown' }}</span>
         </p>
 
-        <p>
+        <p class="salon-card__line">
           <strong>Rating:</strong>
-          {{ salon.rating ?? 'No rating' }}
+          <span>{{ salon.rating ?? 'No rating' }}</span>
         </p>
 
-        <p>
+        <p class="salon-card__line">
           <strong>Reviews:</strong>
-          {{ salon.reviewCount ?? 'No reviews' }}
+          <span>{{ salon.reviewCount ?? 'No reviews' }}</span>
         </p>
 
-        <p>
+        <p class="salon-card__line">
           <strong>Price:</strong>
-          {{ salon.priceRange ?? 'Unknown' }}
+          <span>{{ salon.priceRange ?? 'Unknown' }}</span>
         </p>
       </mat-card-content>
+
+      <mat-card-actions align="end">
+        <a mat-button [routerLink]="['/salons', salon.id]">
+          View details
+        </a>
+      </mat-card-actions>
     </mat-card>
   </div>
+
+  <mat-paginator
+    *ngIf="!isLoading && !errorMessage"
+    [length]="totalElements"
+    [pageIndex]="page"
+    [pageSize]="size"
+    [pageSizeOptions]="[10, 20, 50]"
+    (page)="onPageChange($event)">
+  </mat-paginator>
 </section>

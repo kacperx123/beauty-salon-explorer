@@ -17,6 +17,21 @@
     }
   }
 
+  &__filters {
+    margin-bottom: 20px;
+  }
+
+  &__filters-grid {
+    display: grid;
+    grid-template-columns: minmax(180px, 1fr) minmax(180px, 1fr) auto;
+    gap: 16px;
+    align-items: center;
+
+    button {
+      min-height: 56px;
+    }
+  }
+
   &__summary {
     margin: 0 0 16px;
     color: rgba(0, 0, 0, 0.64);
@@ -36,17 +51,40 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 720px) {
+    &__filters-grid {
+      grid-template-columns: 1fr;
+    }
   }
 }
 
 .salon-card {
+  display: flex;
+  flex-direction: column;
   height: 100%;
 
   mat-card-title {
     font-size: 18px;
+    line-height: 1.25;
   }
 
-  p {
+  mat-card-content {
+    flex: 1;
+  }
+
+  &__line {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr);
+    gap: 8px;
     margin: 8px 0;
+
+    span {
+      min-width: 0;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
   }
 }
